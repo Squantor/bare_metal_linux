@@ -3,14 +3,14 @@ CC = gcc
 
 #flags
 CFLAGS = -m32 -nostdlib -nostdinc -static
-CFLAGS_DEBUG = $(CFLAGS) -O0
+CFLAGS_DEBUG = $(CFLAGS) -O0 -g
 LFLAGS =
 LIBS =
 
 #project settings
 SRCS = src/main.c
 
-INCLUDES = -I./inc
+INCLUDES = -Iinc -I/usr/local/include
 OBJDIR = obj
 EXEDIR = bin
 EXE = bare_metal_x86_linux_C
@@ -27,10 +27,10 @@ DBGEXE = $(DBGEXEDIR)/$(EXE)
 Debug: $(DBGEXE)
 
 $(DBGEXE): $(DBGOBJS)
-	$(CC) $(CFLAGS_DEBUG) $(INCLUDES) $(LFLAGS) $(LIBS)-o $(DBGEXE) $^
+	$(CC) $(CFLAGS_DEBUG) $(LFLAGS) $(LIBS)-o $(DBGEXE) $^
 
 $(DBGOBJDIR)/%.o: %.c
-	$(CC) -c $(CFLAGS) $(CFLAGS_DEBUG) -o $@ $<
+	$(CC) $(INCLUDES) -c $(CFLAGS) $(CFLAGS_DEBUG) -o $@ $<
 
 cleanDebug:
 	rm -f $(DBGEXE) $(DBGOBJS)
