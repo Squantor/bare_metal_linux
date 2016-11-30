@@ -7,4 +7,7 @@ FLAGS_DEBUG = -m32 -nostdlib -nostdinc -static -O0
 %.o: %.c $(DEPS)
 
 Release: main.o
+	$(CC) $(FLAGS_RELEASE) -o main main.o
+
+Debug: main.o
 	$(CC) $(FLAGS_DEBUG) -o main main.o
