@@ -1,26 +1,41 @@
 #tools
-CC=gcc
+CC = gcc
 
 #flags
-CFLAGS_RELEASE = -m32 -nostdlib -nostdinc -static -O2
-CFLAGS_DEBUG = -m32 -nostdlib -nostdinc -static -O0
+CFLAGS = -m32 -nostdlib -nostdinc -static
+CFLAGS_DEBUG = $(CFLAGS) -O0
 LFLAGS =
 LIBS =
 
 #project settings
-SOURCES = main.c
+SRCS = src/main.c
+
 INCLUDES = -I./inc
-MAIN = bare_metal_x86_linux_C
+OBJDIR = obj
+EXEDIR = bin
+EXE = bare_metal_x86_linux_C
 
-OBJECTS = $(SOURCES:.c=.o)
+# makefile magic
+OBJS = $(SRCS:.c=.o)
 
-Release: $(OBJECTS)
-	$(CC) $(FLAGS_RELEASE) $(INCLUDES) -o $(MAIN) $(OBJECTS) $(LFLAGS) $(LIBS)
+# target specific vars
+DBGOBJDIR = $(OBJDIR)/debug
+DBGEXEDIR = $(EXEDIR)/debug
+DBGOBJS = $(addprefix $(DBGOBJDIR)/, $(OBJS))
+DBGEXE = $(DBGEXEDIR)/$(EXE)
 
-Debug: $(OBJECTS)
-	$(CC) $(CFLAGS_DEBUG) $(INCLUDES) -o $(MAIN) $(OBJECTS) $(LFLAGS) $(LIBS)
+Debug: $(DBGEXE)
+
+$(DBGEXE): $(DBGOBJS)
+	$(CC) $(CFLAGS_DEBUG) $(INCLUDES) $(LFLAGS) $(LIBS)-o $(DBGEXE) $^
+
+$(DBGOBJDIR)/%.o: %.c
+	$(CC) -c $(CFLAGS) $(CFLAGS_DEBUG) -o $@ $<
 
 cleanDebug:
+	rm -f $(DBGEXE) $(DBGOBJS)
 
 cleanRelease:
+
+clean: cleanDebug cleanRelease
 
