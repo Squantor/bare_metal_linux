@@ -9,7 +9,8 @@ LFLAGS =
 LIBS =
 
 #project settings
-SRCS = src/main.c
+SRCS_C = src/main.c
+SRCS_S = src/startup.S
 
 INCLUDES = -Iinc -I/usr/local/include
 OBJDIR = obj
@@ -17,7 +18,7 @@ EXEDIR = bin
 EXE = bare_metal_x86_linux_C
 
 # makefile magic
-OBJS = $(SRCS:.c=.o)
+OBJS = $(SRCS_C:.c=.o) $(SRCS_S:.S=.o)
 
 # target specific vars
 DBGOBJDIR = $(OBJDIR)/debug
@@ -32,6 +33,9 @@ $(DBGEXE): $(DBGOBJS)
 	$(SIZE) $(DBGEXE)
 
 $(DBGOBJDIR)/%.o: %.c
+	$(CC) $(INCLUDES) -c $(CFLAGS) $(CFLAGS_DEBUG) -o $@ $<
+
+$(DBGOBJDIR)/%.o: %.S
 	$(CC) $(INCLUDES) -c $(CFLAGS) $(CFLAGS_DEBUG) -o $@ $<
 
 cleanDebug:

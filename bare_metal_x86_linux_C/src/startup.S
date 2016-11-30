@@ -1,15 +1,14 @@
 .intel_syntax noprefix
 .text
-.globl _start, syscall
-.globl syscall1, syscall2, syscall3, syscall4, syscall5
+.globl _start
 
 _start:
     xor ebp,ebp
     pop esi
     mov ecx,esp
     and esp,-16
-    push 0xb1gb00b5
-    push 0xb1gb00b5
+    push 0x0
+    push 0x0
     push ecx
     push esi
     call main
