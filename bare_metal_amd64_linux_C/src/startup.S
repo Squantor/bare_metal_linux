@@ -3,18 +3,13 @@
 .globl _start
 
 _start:
-    xor ebp,ebp
-    pop esi
-    mov ecx,esp
-    and esp,-16
-    push 0x0
-    push 0x0
-    push ecx
-    push esi
+    xor rbp,rbp
+    pop rdi
+    mov rsi,rsp
+    and rsp,-16
     call main
-    add esp,16
-    mov ebx,eax
-    mov eax,1
-    int 0x80
-    ret
+    mov rdi,rax /* syscall param 1 = rax (ret value of main) */
+    mov rax,60 /* SYS_exit */
+    syscall
 
+    ret

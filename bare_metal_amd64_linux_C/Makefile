@@ -5,7 +5,7 @@ DATE = date
 OBJDUMP = objdump
 
 #flags
-CFLAGS = -m32 -nostdlib -nostdinc -static
+CFLAGS = -nostdlib -nostdinc -static
 CFLAGS_DEBUG = $(CFLAGS) -O0 -g
 LFLAGS =
 LIBS =
@@ -18,7 +18,7 @@ INCLUDES = -Iinc -I/usr/local/include
 LOGDIR = log
 OBJDIR = obj
 EXEDIR = bin
-EXE = bare_metal_x86_linux_C
+EXE = bare_metal_amd64_linux_C
 
 # makefile magic
 OBJS = $(SRCS_C:.c=.o) $(SRCS_S:.S=.o)
@@ -40,13 +40,11 @@ $(DBGEXE): $(DBGOBJS)
 	$(SIZE) $(DBGEXE) >> $(DBGLOGDIR)/size.log
 	$(OBJDUMP) -S --disassemble $(DBGEXE) > $(DBGLOGDIR)/$(EXE).lst
 
-
-
 $(DBGOBJDIR)/%.o: %.c
-	$(CC) $(INCLUDES) -c $(CFLAGS) $(CFLAGS_DEBUG) -o $@ $<
+	$(CC) $(INCLUDES) -c $(CFLAGS_DEBUG) -o $@ $<
 
 $(DBGOBJDIR)/%.o: %.S
-	$(CC) $(INCLUDES) -c $(CFLAGS) $(CFLAGS_DEBUG) -o $@ $<
+	$(CC) $(INCLUDES) -c $(CFLAGS_DEBUG) -o $@ $<
 
 cleanDebug:
 	rm -f $(DBGEXE) $(DBGOBJS)
