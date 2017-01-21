@@ -2,7 +2,7 @@
 
 int write(int fd, const void *buf, int count)
 {
-    return syscall3(4, fd, (long)buf, count);
+    return syscall3(1, fd, (long)buf, count);
 }
 
 int main(int argc, char const* argv[])
